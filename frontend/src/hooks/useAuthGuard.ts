@@ -1,0 +1,18 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/auth.store';
+
+export function useAuthGuard() {
+  const router = useRouter();
+  const token = useAuthStore((s) => s.token);
+
+  useEffect(() => {
+    if (!token) {
+      router.replace('/login');
+    }
+  }, [token, router]);
+
+  return Boolean(token);
+}
