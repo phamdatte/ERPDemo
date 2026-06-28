@@ -6,10 +6,14 @@ import clsx from 'clsx';
 import {
   Users,
   Shield,
+  Building2,
+  UserCheck,
   Boxes,
   ShoppingCart,
   FileText,
   BarChart2,
+  Wallet,
+  BookOpen,
   Settings,
 } from 'lucide-react';
 
@@ -19,6 +23,20 @@ const navSections = [
     items: [
       { href: '/admin/users', label: 'Người dùng', icon: Users },
       { href: '/admin/roles', label: 'Vai trò', icon: Shield },
+    ],
+  },
+  {
+    heading: 'Nhân sự',
+    items: [
+      { href: '/hr/employees', label: 'Nhân viên', icon: UserCheck },
+      { href: '/hr/departments', label: 'Phòng ban', icon: Building2 },
+    ],
+  },
+  {
+    heading: 'Kế toán',
+    items: [
+      { href: '/accounting/accounts', label: 'Tài khoản', icon: Wallet },
+      { href: '/accounting/journal-entries', label: 'Bút toán', icon: BookOpen },
     ],
   },
   {
