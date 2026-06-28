@@ -1,0 +1,14 @@
+package com.phamdatte.erpdemo.sales.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
+public record SalesOrderCreateRequest(@NotBlank String orderNumber,
+                                      @NotNull UUID customerId,
+                                      @NotNull LocalDate orderDate,
+                                      String description,
+                                      @NotEmpty List<SalesOrderLineRequest> lines) {}
