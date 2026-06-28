@@ -45,7 +45,7 @@ const navSections = [
       { href: '#', label: 'Kho', icon: Boxes },
       { href: '#', label: 'Mua hàng', icon: ShoppingCart },
       { href: '#', label: 'Bán hàng', icon: FileText },
-      { href: '#', label: 'Báo cáo', icon: BarChart2 },
+      { href: '/reporting', label: 'Báo cáo', icon: BarChart2 },
     ],
   },
 ];

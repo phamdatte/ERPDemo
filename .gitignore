@@ -1,0 +1,22 @@
+# Backend
+backend/**/target/
+backend/**/.mvn/
+backend/**/.idea/
+.mvn/
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.idea/
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
