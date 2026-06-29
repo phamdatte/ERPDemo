@@ -5,7 +5,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { X, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
 import { createJournalEntry, getAccounts, ChartOfAccount } from '@/api/accounting.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   onClose: () => void;
@@ -34,7 +36,7 @@ export function JournalEntryModal({ onClose }: Props) {
           credit: l.credit ? Number(l.credit) : undefined,
         })),
     }),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['journal-entries'] }); onClose(); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['journal-entries'] }); toast.success('Tạo bút toán thành công'); onClose(); },
   });
 
   function updateLine(i: number, field: string, value: string) {
@@ -89,10 +91,10 @@ export function JournalEntryModal({ onClose }: Props) {
                   {lines.map((line, i) => (
                     <tr key={i}>
                       <td className="px-3 py-2">
-                        <select className="input-base" value={line.accountId} onChange={(e) => updateLine(i, 'accountId', e.target.value)}>
+                        <Select value={line.accountId} onChange={(e) => updateLine(i, 'accountId', e.target.value)}>
                           <option value="">-- Chọn --</option>
                           {accounts.map((a) => <option key={a.id} value={a.id}>{a.code} - {a.name}</option>)}
-                        </select>
+                        </Select>
                       </td>
                       <td className="px-3 py-2"><input className="input-base" value={line.description} onChange={(e) => updateLine(i, 'description', e.target.value)} /></td>
                       <td className="px-3 py-2"><input type="number" className="input-base text-right" value={line.debit} onChange={(e) => updateLine(i, 'debit', e.target.value)} /></td>

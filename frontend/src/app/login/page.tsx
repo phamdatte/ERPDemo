@@ -10,8 +10,8 @@ import { login } from '@/api/auth.api';
 export default function LoginPage() {
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin123');
+  const [username, setUsername] = useState('phamdatte');
+  const [password, setPassword] = useState('anhdat123');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 

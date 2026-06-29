@@ -7,18 +7,26 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { TableRowSkeleton } from '@/components/ui/Skeleton';
+import { Pagination } from '@/components/ui/Pagination';
 import {
   getCustomers,
   getInvoices,
   createInvoice,
   Invoice,
 } from '@/api/sales.api';
+import { toast } from '@/components/ui/Toast';
 import { InvoiceModal } from './InvoiceModal';
 
 const statusTones: Record<string, 'success' | 'warning' | 'error' | 'info'> = {
   UNPAID: 'warning',
   PAID: 'success',
   CANCELLED: 'error',
+};
+
+const statusLabels: Record<string, string> = {
+  UNPAID: 'Chưa thanh toán',
+  PAID: 'Đã thanh toán',
+  CANCELLED: 'Đã hủy',
 };
 
 export default function InvoicesPage() {
@@ -38,7 +46,7 @@ export default function InvoicesPage() {
 
   const mutation = useMutation({
     mutationFn: createInvoice,
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['invoices'] }); setCreating(false); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['invoices'] }); toast.success('Tạo hóa đơn thành công'); setCreating(false); },
   });
 
   const content = data?.data;
@@ -79,7 +87,7 @@ export default function InvoicesPage() {
                   <td className="px-4 py-3 text-slate-700">{inv.customerName}</td>
                   <td className="px-4 py-3 text-slate-500">{inv.invoiceDate}</td>
                   <td className="px-4 py-3">
-                    <Badge tone={statusTones[inv.status] ?? 'neutral'}>{inv.status}</Badge>
+                    <Badge tone={statusTones[inv.status] ?? 'neutral'}>{statusLabels[inv.status] ?? inv.status}</Badge>
                   </td>
                   <td className="px-4 py-3 text-right text-slate-700">{inv.totalAmount?.toLocaleString('vi-VN') ?? '-'}</td>
                 </tr>
@@ -87,6 +95,15 @@ export default function InvoicesPage() {
             </tbody>
           </table>
         </div>
+        {content && (
+          <Pagination
+            page={content.pageNumber}
+            totalPages={content.totalPages}
+            totalElements={content.totalElements}
+            pageSize={content.pageSize}
+            onPageChange={setPage}
+          />
+        )}
       </div>
 
       {creating && customers && (

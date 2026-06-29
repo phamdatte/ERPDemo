@@ -14,6 +14,7 @@ import {
   getAllRoles,
   assignRoles,
 } from '@/api/admin.api';
+import { toast } from '@/components/ui/Toast';
 import { UserModal } from './UserModal';
 import { RolesModal } from './RolesModal';
 
@@ -31,7 +32,7 @@ export default function UsersPage() {
 
   const del = useMutation({
     mutationFn: deleteUser,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['users'] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['users'] }); toast.success('Xóa người dùng thành công'); },
   });
 
   const content = data?.data;
@@ -105,7 +106,7 @@ export default function UsersPage() {
                       </Button>
                       <Button
                         variant="ghost"
-                        onClick={() => del.mutate(user.id)}
+                        onClick={() => { if (window.confirm('Bạn chắc chắn muốn xóa người dùng này?')) del.mutate(user.id); }}
                         className="text-red-500 hover:text-red-700 hover:bg-red-50"
                       >
                         <Trash2 size={16} />

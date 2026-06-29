@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { createEmployee, updateEmployee, Employee } from '@/api/hr.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   employee: Employee | null;
@@ -34,7 +35,7 @@ export function EmployeeModal({ employee, onClose }: Props) {
   const mutation = useMutation({
     mutationFn: (payload: Partial<Employee>) =>
       isEdit && employee ? updateEmployee(employee.id, payload) : createEmployee(payload),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['employees'] }); onClose(); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['employees'] }); toast.success(isEdit ? 'Cập nhật nhân viên thành công' : 'Thêm nhân viên thành công'); onClose(); },
   });
 
   function handleSubmit(e: React.FormEvent) {

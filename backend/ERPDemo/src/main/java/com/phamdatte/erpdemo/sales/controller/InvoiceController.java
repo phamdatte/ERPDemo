@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/sales/invoices")
+@RequestMapping("/v1/sales/invoices")
 public class InvoiceController {
 
     private final InvoiceService invoiceService;

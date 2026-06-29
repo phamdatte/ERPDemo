@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,9 +45,11 @@ public class Department extends BaseEntity {
     @JoinColumn(name = "manager_id")
     private Employee manager;
 
+    @Builder.Default
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Department> children = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "department")
     private List<Employee> employees = new ArrayList<>();
 }

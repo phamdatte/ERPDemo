@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { X, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
 import { Product } from '@/api/inventory.api';
+import { toast } from '@/components/ui/Toast';
 
 interface LineDraft {
   productId: string;
@@ -42,6 +44,8 @@ export function BomModal({ products, mutation, onClose }: Props) {
       lines: lines
         .filter((l) => l.productId)
         .map((l) => ({ productId: l.productId, quantity: Number(l.quantity) })),
+    }, {
+      onError: (err: any) => toast.error(err?.response?.data?.message ?? 'Có lỗi xảy ra'),
     });
   }
 
@@ -55,15 +59,12 @@ export function BomModal({ products, mutation, onClose }: Props) {
         <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4 overflow-y-auto">
           <div className="grid grid-cols-2 gap-4">
             <Input label="Mã BOM" name="code" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} />
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Sản phẩm thành phẩm</label>
-              <select required value={form.productId} onChange={(e) => setForm({ ...form, productId: e.target.value })} className="input-base">
-                <option value="">-- Chọn sản phẩm --</option>
-                {products.map((p) => (
-                  <option key={p.id} value={p.id}>{p.name}</option>
-                ))}
-              </select>
-            </div>
+            <Select label="Sản phẩm thành phẩm" required value={form.productId} onChange={(e) => setForm({ ...form, productId: e.target.value })}>
+              <option value="">-- Chọn sản phẩm --</option>
+              {products.map((p) => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </Select>
           </div>
           <Input label="Mô tả" name="description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
 
@@ -76,12 +77,12 @@ export function BomModal({ products, mutation, onClose }: Props) {
               {lines.map((line, i) => (
                 <div key={i} className="grid grid-cols-12 gap-2 items-end">
                   <div className="col-span-7">
-                    <select value={line.productId} onChange={(e) => updateLine(i, 'productId', e.target.value)} className="input-base text-sm">
+                    <Select value={line.productId} onChange={(e) => updateLine(i, 'productId', e.target.value)} className="text-sm">
                       <option value="">-- Nguyên vật liệu --</option>
                       {products.map((p) => (
                         <option key={p.id} value={p.id}>{p.name}</option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
                   <div className="col-span-4">
                     <input type="number" min="0.01" step="0.01" placeholder="Số lượng" value={line.quantity} onChange={(e) => updateLine(i, 'quantity', e.target.value)} className="input-base text-sm" />

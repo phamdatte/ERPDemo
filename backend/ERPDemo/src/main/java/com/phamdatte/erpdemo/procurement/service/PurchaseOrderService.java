@@ -34,11 +34,13 @@ public class PurchaseOrderService {
         this.productRepository = productRepository;
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<PurchaseOrderDto> list(int page, int size) {
         Page<PurchaseOrder> result = purchaseOrderRepository.findAllWithVendor(PageRequest.of(page, size));
         return PageResponse.of(result.map(this::toDto));
     }
 
+    @Transactional(readOnly = true)
     public PurchaseOrderDto get(UUID id) {
         return toDto(purchaseOrderRepository.findWithLinesById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Purchase order not found: " + id)));

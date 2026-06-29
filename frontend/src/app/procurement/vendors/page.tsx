@@ -6,6 +6,7 @@ import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { TableRowSkeleton } from '@/components/ui/Skeleton';
+import { Pagination } from '@/components/ui/Pagination';
 import {
   getVendors,
   createVendor,
@@ -13,6 +14,7 @@ import {
   deleteVendor,
   Vendor,
 } from '@/api/procurement.api';
+import { toast } from '@/components/ui/Toast';
 import { VendorModal } from './VendorModal';
 
 export default function VendorsPage() {
@@ -29,7 +31,7 @@ export default function VendorsPage() {
 
   const del = useMutation({
     mutationFn: deleteVendor,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['vendors'] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['vendors'] }); toast.success('Xóa nhà cung cấp thành công'); },
   });
 
   const content = data?.data;
@@ -82,7 +84,7 @@ export default function VendorsPage() {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
                       <Button variant="ghost" onClick={() => setEditing(v)}><Pencil size={16} /></Button>
-                      <Button variant="ghost" onClick={() => del.mutate(v.id)} className="text-red-500 hover:text-red-700 hover:bg-red-50"><Trash2 size={16} /></Button>
+                      <Button variant="ghost" onClick={() => { if (window.confirm('Bạn chắc chắn muốn xóa nhà cung cấp này?')) del.mutate(v.id); }} className="text-red-500 hover:text-red-700 hover:bg-red-50"><Trash2 size={16} /></Button>
                     </div>
                   </td>
                 </tr>
@@ -90,6 +92,15 @@ export default function VendorsPage() {
             </tbody>
           </table>
         </div>
+        {content && (
+          <Pagination
+            page={content.pageNumber}
+            totalPages={content.totalPages}
+            totalElements={content.totalElements}
+            pageSize={content.pageSize}
+            onPageChange={setPage}
+          />
+        )}
       </div>
 
       {(creating || editing) && (

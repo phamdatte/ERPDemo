@@ -64,22 +64,22 @@ export async function getCustomers(params: {
   size?: number;
   keyword?: string;
 } = {}): Promise<ApiResponse<PageResponse<Customer>>> {
-  const { data } = await api.get('/sales/customers', { params });
+  const { data } = await api.get('/v1/sales/customers', { params });
   return data;
 }
 
 export async function createCustomer(payload: Partial<Customer>) {
-  const { data } = await api.post<ApiResponse<Customer>>('/sales/customers', payload);
+  const { data } = await api.post<ApiResponse<Customer>>('/v1/sales/customers', payload);
   return data;
 }
 
 export async function updateCustomer(id: string, payload: Partial<Customer>) {
-  const { data } = await api.put<ApiResponse<Customer>>(`/sales/customers/${id}`, payload);
+  const { data } = await api.put<ApiResponse<Customer>>(`/v1/sales/customers/${id}`, payload);
   return data;
 }
 
 export async function deleteCustomer(id: string) {
-  const { data } = await api.delete(`/sales/customers/${id}`);
+  const { data } = await api.delete(`/v1/sales/customers/${id}`);
   return data;
 }
 
@@ -87,17 +87,17 @@ export async function getSalesOrders(params: {
   page?: number;
   size?: number;
 } = {}): Promise<ApiResponse<PageResponse<SalesOrder>>> {
-  const { data } = await api.get('/sales/sales-orders', { params });
+  const { data } = await api.get('/v1/sales/sales-orders', { params });
   return data;
 }
 
 export async function getSalesOrder(id: string): Promise<ApiResponse<SalesOrder>> {
-  const { data } = await api.get(`/sales/sales-orders/${id}`);
+  const { data } = await api.get(`/v1/sales/sales-orders/${id}`);
   return data;
 }
 
 export async function createSalesOrder(payload: Partial<SalesOrder>) {
-  const { data } = await api.post<ApiResponse<SalesOrder>>('/sales/sales-orders', payload);
+  const { data } = await api.post<ApiResponse<SalesOrder>>('/v1/sales/sales-orders', payload);
   return data;
 }
 
@@ -105,16 +105,16 @@ export async function getInvoices(params: {
   page?: number;
   size?: number;
 } = {}): Promise<ApiResponse<PageResponse<Invoice>>> {
-  const { data } = await api.get('/sales/invoices', { params });
+  const { data } = await api.get('/v1/sales/invoices', { params });
   return data;
 }
 
 export async function getInvoice(id: string): Promise<ApiResponse<Invoice>> {
-  const { data } = await api.get(`/sales/invoices/${id}`);
+  const { data } = await api.get(`/v1/sales/invoices/${id}`);
   return data;
 }
 
 export async function createInvoice(payload: Partial<Invoice>) {
-  const { data } = await api.post<ApiResponse<Invoice>>('/sales/invoices', payload);
+  const { data } = await api.post<ApiResponse<Invoice>>('/v1/sales/invoices', payload);
   return data;
 }

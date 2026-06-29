@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/procurement/vendors")
+@RequestMapping("/v1/procurement/vendors")
 public class VendorController {
 
     private final VendorService vendorService;

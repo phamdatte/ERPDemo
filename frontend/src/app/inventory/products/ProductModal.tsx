@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { createProduct, updateProduct, Product } from '@/api/inventory.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   product: Product | null;
@@ -30,7 +31,7 @@ export function ProductModal({ product, onClose }: Props) {
   const mutation = useMutation({
     mutationFn: (payload: Partial<Product>) =>
       isEdit && product ? updateProduct(product.id, payload) : createProduct(payload),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); onClose(); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); toast.success(isEdit ? 'Cập nhật sản phẩm thành công' : 'Thêm sản phẩm thành công'); onClose(); },
   });
 
   function handleSubmit(e: React.FormEvent) {
@@ -52,11 +53,13 @@ export function ProductModal({ product, onClose }: Props) {
           <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded"><X size={18} /></button>
         </div>
         <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
-          <Input label="Mã sản phẩm" name="code" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} disabled={isEdit} />
-          <Input label="Tên sản phẩm" name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input label="Mã sản phẩm" name="code" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} disabled={isEdit} />
+            <Input label="Tên sản phẩm" name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <Input label="Đơn vị" name="unit" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} />
+            <Input label="Đơn giá" name="unitPrice" type="number" value={form.unitPrice} onChange={(e) => setForm({ ...form, unitPrice: e.target.value })} />
+          </div>
           <Input label="Mô tả" name="description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-          <Input label="Đơn vị" name="unit" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} />
-          <Input label="Đơn giá" name="unitPrice" type="number" value={form.unitPrice} onChange={(e) => setForm({ ...form, unitPrice: e.target.value })} />
           {mutation.isError && <p className="text-xs text-red-600">{(mutation.error as any)?.response?.data?.message ?? 'Có lỗi xảy ra'}</p>}
           <div className="flex items-center justify-end gap-3 pt-2">
             <Button type="button" variant="secondary" onClick={onClose}>Hủy</Button>

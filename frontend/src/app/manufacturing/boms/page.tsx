@@ -6,11 +6,13 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { TableRowSkeleton } from '@/components/ui/Skeleton';
+import { Pagination } from '@/components/ui/Pagination';
 import {
   getBillOfMaterials,
   createBillOfMaterial,
   BillOfMaterial,
 } from '@/api/manufacturing.api';
+import { toast } from '@/components/ui/Toast';
 import { getProducts } from '@/api/inventory.api';
 import { BomModal } from './BomModal';
 
@@ -31,7 +33,7 @@ export default function BomsPage() {
 
   const mutation = useMutation({
     mutationFn: createBillOfMaterial,
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['boms'] }); setCreating(false); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['boms'] }); toast.success('Tạo BOM thành công'); setCreating(false); },
   });
 
   const content = data?.data;
@@ -41,7 +43,7 @@ export default function BomsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Định mức sản xuất (BOM)</h1>
-          <p className="text-xs text-slate-400 mt-1">Quản lý_bill_of_material</p>
+          <p className="text-xs text-slate-400 mt-1">Quản lý định mứt sản xuất</p>
         </div>
         <Button onClick={() => setCreating(true)}>
           <Plus size={16} /> Tạo BOM
@@ -76,6 +78,15 @@ export default function BomsPage() {
             </tbody>
           </table>
         </div>
+        {content && (
+          <Pagination
+            page={content.pageNumber}
+            totalPages={content.totalPages}
+            totalElements={content.totalElements}
+            pageSize={content.pageSize}
+            onPageChange={setPage}
+          />
+        )}
       </div>
 
       {creating && products && (

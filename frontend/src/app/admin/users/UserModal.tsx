@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { createUser, updateUser, User } from '@/api/admin.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   user: User | null;
@@ -45,6 +46,7 @@ export function UserModal({ user, onClose }: Props) {
         : createUser(payload),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['users'] });
+      toast.success(isEdit ? 'Cập nhật người dùng thành công' : 'Thêm người dùng thành công');
       onClose();
     },
   });

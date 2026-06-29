@@ -6,15 +6,21 @@ import clsx from 'clsx';
 import {
   Users,
   Shield,
-  Building2,
   UserCheck,
-  Boxes,
-  ShoppingCart,
-  FileText,
-  BarChart2,
+  Building2,
   Wallet,
   BookOpen,
-  Settings,
+  Package,
+  Boxes,
+  ArrowLeftRight,
+  Truck,
+  ShoppingCart,
+  Contact,
+  ShoppingBag,
+  Receipt,
+  Factory,
+  ClipboardList,
+  BarChart2,
 } from 'lucide-react';
 
 const navSections = [
@@ -40,12 +46,39 @@ const navSections = [
     ],
   },
   {
-    heading: 'Module',
+    heading: 'Tồn kho',
     items: [
-      { href: '#', label: 'Kho', icon: Boxes },
-      { href: '#', label: 'Mua hàng', icon: ShoppingCart },
-      { href: '#', label: 'Bán hàng', icon: FileText },
-      { href: '#', label: 'Báo cáo', icon: BarChart2 },
+      { href: '/inventory/products', label: 'Sản phẩm', icon: Package },
+      { href: '/inventory/warehouses', label: 'Kho', icon: Boxes },
+      { href: '/inventory/stock-moves', label: 'Phiếu nhập/xuất', icon: ArrowLeftRight },
+    ],
+  },
+  {
+    heading: 'Mua hàng',
+    items: [
+      { href: '/procurement/vendors', label: 'Nhà cung cấp', icon: Truck },
+      { href: '/procurement/purchase-orders', label: 'Đơn đặt mua', icon: ShoppingCart },
+    ],
+  },
+  {
+    heading: 'Bán hàng',
+    items: [
+      { href: '/sales/customers', label: 'Khách hàng', icon: Contact },
+      { href: '/sales/sales-orders', label: 'Đơn bán', icon: ShoppingBag },
+      { href: '/sales/invoices', label: 'Hóa đơn', icon: Receipt },
+    ],
+  },
+  {
+    heading: 'Sản xuất',
+    items: [
+      { href: '/manufacturing/boms', label: 'Định mức (BOM)', icon: Factory },
+      { href: '/manufacturing/work-orders', label: 'Lệnh sản xuất', icon: ClipboardList },
+    ],
+  },
+  {
+    heading: 'Báo cáo',
+    items: [
+      { href: '/reporting', label: 'Dashboard', icon: BarChart2 },
     ],
   },
 ];
@@ -68,11 +101,10 @@ export function Sidebar() {
             <div className="space-y-0.5">
               {section.items.map((item) => {
                 const Icon = item.icon;
-                const isActive =
-                  item.href !== '#' && pathname.startsWith(item.href);
+                const isActive = pathname.startsWith(item.href);
                 return (
                   <Link
-                    key={item.label}
+                    key={item.href}
                     href={item.href}
                     className={clsx(
                       'flex items-center gap-3 px-3 py-2 rounded text-sm font-medium transition-colors',
@@ -90,16 +122,6 @@ export function Sidebar() {
           </div>
         ))}
       </nav>
-
-      <div className="px-3 pb-4">
-        <Link
-          href="#"
-          className="flex items-center gap-3 px-3 py-2 rounded text-sm font-medium text-slate-300 hover:bg-primary-700/60 hover:text-white transition-colors"
-        >
-          <Settings size={16} className="shrink-0" />
-          <span>Cài đặt</span>
-        </Link>
-      </div>
     </aside>
   );
 }

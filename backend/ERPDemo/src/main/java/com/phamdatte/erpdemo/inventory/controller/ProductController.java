@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/inventory/products")
+@RequestMapping("/v1/inventory/products")
 public class ProductController {
 
     private final ProductService productService;

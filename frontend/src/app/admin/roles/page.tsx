@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { TableRowSkeleton } from '@/components/ui/Skeleton';
 import { getRoles, deleteRole, Role } from '@/api/admin.api';
+import { toast } from '@/components/ui/Toast';
 import { RoleModal } from './RoleModal';
 
 export default function RolesPage() {
@@ -23,7 +24,7 @@ export default function RolesPage() {
 
   const del = useMutation({
     mutationFn: deleteRole,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['roles-page'] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['roles-page'] }); toast.success('Xóa vai trò thành công'); },
   });
 
   const content = data?.data;
@@ -88,7 +89,7 @@ export default function RolesPage() {
                       </Button>
                       <Button
                         variant="ghost"
-                        onClick={() => del.mutate(role.id)}
+                        onClick={() => { if (window.confirm('Bạn chắc chắn muốn xóa vai trò này?')) del.mutate(role.id); }}
                         className="text-red-500 hover:text-red-700 hover:bg-red-50"
                       >
                         <Trash2 size={16} />

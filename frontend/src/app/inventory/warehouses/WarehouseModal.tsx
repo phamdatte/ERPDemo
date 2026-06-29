@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { createWarehouse, updateWarehouse, Warehouse } from '@/api/inventory.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   warehouse: Warehouse | null;
@@ -29,7 +30,7 @@ export function WarehouseModal({ warehouse, onClose }: Props) {
   const mutation = useMutation({
     mutationFn: (payload: Partial<Warehouse>) =>
       isEdit && warehouse ? updateWarehouse(warehouse.id, payload) : createWarehouse(payload),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['warehouses'] }); onClose(); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['warehouses'] }); toast.success(isEdit ? 'Cập nhật kho thành công' : 'Thêm kho thành công'); onClose(); },
   });
 
   function handleSubmit(e: React.FormEvent) {

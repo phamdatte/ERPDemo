@@ -58,6 +58,11 @@ export async function createAccount(payload: Partial<ChartOfAccount>) {
   return data;
 }
 
+export async function updateAccount(id: string, payload: Partial<ChartOfAccount>) {
+  const { data } = await api.put<ApiResponse<ChartOfAccount>>(`/v1/accounting/accounts/${id}`, payload);
+  return data;
+}
+
 export async function deleteAccount(id: string) {
   const { data } = await api.delete(`/v1/accounting/accounts/${id}`);
   return data;
@@ -79,5 +84,10 @@ export async function createJournalEntry(payload: {
   lines: JournalLine[];
 }) {
   const { data } = await api.post<ApiResponse<JournalEntry>>('/v1/accounting/journal-entries', payload);
+  return data;
+}
+
+export async function deleteJournalEntry(id: string) {
+  const { data } = await api.delete(`/v1/accounting/journal-entries/${id}`);
   return data;
 }

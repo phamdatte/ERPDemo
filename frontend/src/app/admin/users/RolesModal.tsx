@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { getAllRoles, assignRoles, User } from '@/api/admin.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   user: User;
@@ -28,6 +29,7 @@ export function RolesModal({ user, onClose }: Props) {
     mutationFn: () => assignRoles(user.id, selected),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['users'] });
+      toast.success('Cập nhật vai trò thành công');
       onClose();
     },
   });

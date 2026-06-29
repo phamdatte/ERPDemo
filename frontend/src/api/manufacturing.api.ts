@@ -49,17 +49,17 @@ export async function getBillOfMaterials(params: {
   page?: number;
   size?: number;
 } = {}): Promise<ApiResponse<PageResponse<BillOfMaterial>>> {
-  const { data } = await api.get('/manufacturing/boms', { params });
+  const { data } = await api.get('/v1/manufacturing/boms', { params });
   return data;
 }
 
 export async function getBillOfMaterial(id: string): Promise<ApiResponse<BillOfMaterial>> {
-  const { data } = await api.get(`/manufacturing/boms/${id}`);
+  const { data } = await api.get(`/v1/manufacturing/boms/${id}`);
   return data;
 }
 
 export async function createBillOfMaterial(payload: Partial<BillOfMaterial>) {
-  const { data } = await api.post<ApiResponse<BillOfMaterial>>('/manufacturing/boms', payload);
+  const { data } = await api.post<ApiResponse<BillOfMaterial>>('/v1/manufacturing/boms', payload);
   return data;
 }
 
@@ -67,16 +67,16 @@ export async function getWorkOrders(params: {
   page?: number;
   size?: number;
 } = {}): Promise<ApiResponse<PageResponse<WorkOrder>>> {
-  const { data } = await api.get('/manufacturing/work-orders', { params });
+  const { data } = await api.get('/v1/manufacturing/work-orders', { params });
   return data;
 }
 
 export async function getWorkOrder(id: string): Promise<ApiResponse<WorkOrder>> {
-  const { data } = await api.get(`/manufacturing/work-orders/${id}`);
+  const { data } = await api.get(`/v1/manufacturing/work-orders/${id}`);
   return data;
 }
 
 export async function createWorkOrder(payload: Partial<WorkOrder>) {
-  const { data } = await api.post<ApiResponse<WorkOrder>>('/manufacturing/work-orders', payload);
+  const { data } = await api.post<ApiResponse<WorkOrder>>('/v1/manufacturing/work-orders', payload);
   return data;
 }
