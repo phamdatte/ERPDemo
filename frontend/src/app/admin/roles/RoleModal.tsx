@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { createRole, updateRole, Role } from '@/api/admin.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   role: Role | null;
@@ -30,6 +31,7 @@ export function RoleModal({ role, onClose }: Props) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['roles-page'] });
       qc.invalidateQueries({ queryKey: ['roles-all'] });
+      toast.success(isEdit ? 'Cập nhật vai trò thành công' : 'Thêm vai trò thành công');
       onClose();
     },
   });

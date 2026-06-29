@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { TableRowSkeleton } from '@/components/ui/Skeleton';
+import { Pagination } from '@/components/ui/Pagination';
 import {
   getCustomers,
   getSalesOrders,
@@ -14,6 +15,7 @@ import {
   SalesOrder,
   Customer,
 } from '@/api/sales.api';
+import { toast } from '@/components/ui/Toast';
 import { getProducts, Product } from '@/api/inventory.api';
 import { SalesOrderModal } from './SalesOrderModal';
 
@@ -22,6 +24,13 @@ const statusTones: Record<string, 'success' | 'warning' | 'error' | 'info'> = {
   CONFIRMED: 'info',
   DELIVERED: 'success',
   CANCELLED: 'error',
+};
+
+const statusLabels: Record<string, string> = {
+  DRAFT: 'Nháp',
+  CONFIRMED: 'Đã xác nhận',
+  DELIVERED: 'Đã giao',
+  CANCELLED: 'Đã hủy',
 };
 
 export default function SalesOrdersPage() {
@@ -46,7 +55,7 @@ export default function SalesOrdersPage() {
 
   const mutation = useMutation({
     mutationFn: createSalesOrder,
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['sales-orders'] }); setCreating(false); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['sales-orders'] }); toast.success('Lập đơn bán thành công'); setCreating(false); },
   });
 
   const content = data?.data;
@@ -91,7 +100,7 @@ export default function SalesOrdersPage() {
                   <td className="px-4 py-3 text-slate-700">{o.customerName}</td>
                   <td className="px-4 py-3 text-slate-500">{o.orderDate}</td>
                   <td className="px-4 py-3">
-                    <Badge tone={statusTones[o.status] ?? 'neutral'}>{o.status}</Badge>
+                    <Badge tone={statusTones[o.status] ?? 'neutral'}>{statusLabels[o.status] ?? o.status}</Badge>
                   </td>
                   <td className="px-4 py-3 text-right text-slate-700">{totalLines(o.lines).toLocaleString('vi-VN')}</td>
                 </tr>
@@ -99,6 +108,15 @@ export default function SalesOrdersPage() {
             </tbody>
           </table>
         </div>
+        {content && (
+          <Pagination
+            page={content.pageNumber}
+            totalPages={content.totalPages}
+            totalElements={content.totalElements}
+            pageSize={content.pageSize}
+            onPageChange={setPage}
+          />
+        )}
       </div>
 
       {creating && customers && products && (

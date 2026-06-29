@@ -52,6 +52,7 @@ public class JournalEntryService {
             ChartOfAccount acc = accountRepository.findById(lineReq.accountId())
                     .orElseThrow(() -> new EntityNotFoundException("Account not found: " + lineReq.accountId()));
             JournalLine line = JournalLine.builder()
+                    .journalEntry(entry)
                     .account(acc)
                     .description(lineReq.description())
                     .debit(lineReq.debit() != null ? lineReq.debit() : BigDecimal.ZERO)

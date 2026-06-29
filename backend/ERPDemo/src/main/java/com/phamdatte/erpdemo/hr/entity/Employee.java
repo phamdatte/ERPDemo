@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -64,9 +65,11 @@ public class Employee extends BaseEntity {
     @Column(name = "base_salary", precision = 14, scale = 2)
     private BigDecimal baseSalary;
 
+    @Builder.Default
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Contract> contracts = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Attendance> attendances = new ArrayList<>();
 }

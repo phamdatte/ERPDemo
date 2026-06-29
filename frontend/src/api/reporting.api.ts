@@ -44,26 +44,26 @@ export interface ApiResponse<T> {
 }
 
 export async function getDashboardStats(): Promise<ApiResponse<DashboardStat[]>> {
-  const { data } = await api.get('/reporting/dashboard');
+  const { data } = await api.get('/v1/reporting/dashboard');
   return data;
 }
 
 export async function getRevenueByMonth(year = 2026): Promise<ApiResponse<MonthlyRevenue[]>> {
-  const { data } = await api.get('/reporting/revenue-by-month', { params: { year } });
+  const { data } = await api.get('/v1/reporting/revenue-by-month', { params: { year } });
   return data;
 }
 
 export async function getHeadcount(): Promise<ApiResponse<HeadcountRow[]>> {
-  const { data } = await api.get('/reporting/headcount');
+  const { data } = await api.get('/v1/reporting/headcount');
   return data;
 }
 
 export async function getInventoryTurnover(): Promise<ApiResponse<InventoryTurnoverRow[]>> {
-  const { data } = await api.get('/reporting/inventory');
+  const { data } = await api.get('/v1/reporting/inventory');
   return data;
 }
 
 export async function exportExcel(module: string): Promise<Blob> {
-  const { data } = await api.get(`/reporting/export/${module}`, { responseType: 'blob' });
+  const { data } = await api.get(`/v1/reporting/export/${module}`, { responseType: 'blob' });
   return data;
 }

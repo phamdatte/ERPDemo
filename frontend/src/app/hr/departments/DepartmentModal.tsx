@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { createDepartment, updateDepartment, Department } from '@/api/hr.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   department: Department | null;
@@ -24,7 +25,7 @@ export function DepartmentModal({ department, onClose }: Props) {
   const mutation = useMutation({
     mutationFn: (payload: Partial<Department>) =>
       isEdit && department ? updateDepartment(department.id, payload) : createDepartment(payload),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['departments'] }); onClose(); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['departments'] }); toast.success(isEdit ? 'Cập nhật phòng ban thành công' : 'Thêm phòng ban thành công'); onClose(); },
   });
 
   function handleSubmit(e: React.FormEvent) {

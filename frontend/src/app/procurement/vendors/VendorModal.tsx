@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { createVendor, updateVendor, Vendor } from '@/api/procurement.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   vendor: Vendor | null;
@@ -31,7 +32,7 @@ export function VendorModal({ vendor, onClose }: Props) {
   const mutation = useMutation({
     mutationFn: (payload: Partial<Vendor>) =>
       isEdit && vendor ? updateVendor(vendor.id, payload) : createVendor(payload),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['vendors'] }); onClose(); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['vendors'] }); toast.success(isEdit ? 'Cập nhật nhà cung cấp thành công' : 'Thêm nhà cung cấp thành công'); onClose(); },
   });
 
   function handleSubmit(e: React.FormEvent) {
@@ -47,12 +48,14 @@ export function VendorModal({ vendor, onClose }: Props) {
           <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded"><X size={18} /></button>
         </div>
         <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
-          <Input label="Mã nhà cung cấp" name="code" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} disabled={isEdit} />
-          <Input label="Tên nhà cung cấp" name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          <Input label="Người liên hệ" name="contactName" value={form.contactName} onChange={(e) => setForm({ ...form, contactName: e.target.value })} />
-          <Input label="Điện thoại" name="phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-          <Input label="Email" name="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-          <Input label="Địa chỉ" name="address" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input label="Mã nhà cung cấp" name="code" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} disabled={isEdit} />
+            <Input label="Tên nhà cung cấp" name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <Input label="Người liên hệ" name="contactName" value={form.contactName} onChange={(e) => setForm({ ...form, contactName: e.target.value })} />
+            <Input label="Điện thoại" name="phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+            <Input label="Email" name="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+            <Input label="Địa chỉ" name="address" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+          </div>
           {mutation.isError && <p className="text-xs text-red-600">{(mutation.error as any)?.response?.data?.message ?? 'Có lỗi xảy ra'}</p>}
           <div className="flex items-center justify-end gap-3 pt-2">
             <Button type="button" variant="secondary" onClick={onClose}>Hủy</Button>

@@ -121,7 +121,7 @@ export default function ReportingPage() {
             {exporting === 'hr' ? 'Đang xuất...' : <><Download size={16} /> HR</>}
           </Button>
           <Button variant="secondary" onClick={() => handleExport('sales')} disabled={!!exporting}>
-            {exporting === 'sales' ? 'āang xuất...' : <><Download size={16} /> Sales</>}
+            {exporting === 'sales' ? 'Đang xuất...' : <><Download size={16} /> Sales</>}
           </Button>
           <Button variant="secondary" onClick={() => handleExport('inventory')} disabled={!!exporting}>
             {exporting === 'inventory' ? 'Đang xuất...' : <><Download size={16} /> Inventory</>}

@@ -29,11 +29,13 @@ public class StockMoveService {
         this.warehouseRepository = warehouseRepository;
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<StockMoveDto> list(int page, int size) {
         Page<StockMove> result = stockMoveRepository.findAll(PageRequest.of(page, size));
         return PageResponse.of(result.map(this::toDto));
     }
 
+    @Transactional(readOnly = true)
     public StockMoveDto get(UUID id) {
         return toDto(find(id));
     }

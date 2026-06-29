@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { TableRowSkeleton } from '@/components/ui/Skeleton';
+import { Pagination } from '@/components/ui/Pagination';
 import {
   getStockMoves,
   getProducts,
@@ -14,6 +15,7 @@ import {
   createStockMove,
   StockMove,
 } from '@/api/inventory.api';
+import { toast } from '@/components/ui/Toast';
 import { StockMoveModal } from './StockMoveModal';
 
 export default function StockMovesPage() {
@@ -38,7 +40,7 @@ export default function StockMovesPage() {
 
   const mutation = useMutation({
     mutationFn: createStockMove,
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['stock-moves'] }); setCreating(false); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['stock-moves'] }); toast.success('Lập phiếu thành công'); setCreating(false); },
   });
 
   const content = data?.data;
@@ -90,6 +92,15 @@ export default function StockMovesPage() {
             </tbody>
           </table>
         </div>
+        {content && (
+          <Pagination
+            page={content.pageNumber}
+            totalPages={content.totalPages}
+            totalElements={content.totalElements}
+            pageSize={content.pageSize}
+            onPageChange={setPage}
+          />
+        )}
       </div>
 
       {creating && products && warehouses && (

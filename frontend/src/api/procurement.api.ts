@@ -50,22 +50,22 @@ export async function getVendors(params: {
   size?: number;
   keyword?: string;
 } = {}): Promise<ApiResponse<PageResponse<Vendor>>> {
-  const { data } = await api.get('/procurement/vendors', { params });
+  const { data } = await api.get('/v1/procurement/vendors', { params });
   return data;
 }
 
 export async function createVendor(payload: Partial<Vendor>) {
-  const { data } = await api.post<ApiResponse<Vendor>>('/procurement/vendors', payload);
+  const { data } = await api.post<ApiResponse<Vendor>>('/v1/procurement/vendors', payload);
   return data;
 }
 
 export async function updateVendor(id: string, payload: Partial<Vendor>) {
-  const { data } = await api.put<ApiResponse<Vendor>>(`/procurement/vendors/${id}`, payload);
+  const { data } = await api.put<ApiResponse<Vendor>>(`/v1/procurement/vendors/${id}`, payload);
   return data;
 }
 
 export async function deleteVendor(id: string) {
-  const { data } = await api.delete(`/procurement/vendors/${id}`);
+  const { data } = await api.delete(`/v1/procurement/vendors/${id}`);
   return data;
 }
 
@@ -73,16 +73,16 @@ export async function getPurchaseOrders(params: {
   page?: number;
   size?: number;
 } = {}): Promise<ApiResponse<PageResponse<PurchaseOrder>>> {
-  const { data } = await api.get('/procurement/purchase-orders', { params });
+  const { data } = await api.get('/v1/procurement/purchase-orders', { params });
   return data;
 }
 
 export async function getPurchaseOrder(id: string): Promise<ApiResponse<PurchaseOrder>> {
-  const { data } = await api.get(`/procurement/purchase-orders/${id}`);
+  const { data } = await api.get(`/v1/procurement/purchase-orders/${id}`);
   return data;
 }
 
 export async function createPurchaseOrder(payload: Partial<PurchaseOrder>) {
-  const { data } = await api.post<ApiResponse<PurchaseOrder>>('/procurement/purchase-orders', payload);
+  const { data } = await api.post<ApiResponse<PurchaseOrder>>('/v1/procurement/purchase-orders', payload);
   return data;
 }

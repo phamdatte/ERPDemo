@@ -48,27 +48,27 @@ export async function getProducts(params: {
   size?: number;
   keyword?: string;
 } = {}): Promise<ApiResponse<PageResponse<Product>>> {
-  const { data } = await api.get('/inventory/products', { params });
+  const { data } = await api.get('/v1/inventory/products', { params });
   return data;
 }
 
 export async function getProduct(id: string): Promise<ApiResponse<Product>> {
-  const { data } = await api.get(`/inventory/products/${id}`);
+  const { data } = await api.get(`/v1/inventory/products/${id}`);
   return data;
 }
 
 export async function createProduct(payload: Partial<Product>) {
-  const { data } = await api.post<ApiResponse<Product>>('/inventory/products', payload);
+  const { data } = await api.post<ApiResponse<Product>>('/v1/inventory/products', payload);
   return data;
 }
 
 export async function updateProduct(id: string, payload: Partial<Product>) {
-  const { data } = await api.put<ApiResponse<Product>>(`/inventory/products/${id}`, payload);
+  const { data } = await api.put<ApiResponse<Product>>(`/v1/inventory/products/${id}`, payload);
   return data;
 }
 
 export async function deleteProduct(id: string) {
-  const { data } = await api.delete(`/inventory/products/${id}`);
+  const { data } = await api.delete(`/v1/inventory/products/${id}`);
   return data;
 }
 
@@ -77,22 +77,22 @@ export async function getWarehouses(params: {
   size?: number;
   keyword?: string;
 } = {}): Promise<ApiResponse<PageResponse<Warehouse>>> {
-  const { data } = await api.get('/inventory/warehouses', { params });
+  const { data } = await api.get('/v1/inventory/warehouses', { params });
   return data;
 }
 
 export async function createWarehouse(payload: Partial<Warehouse>) {
-  const { data } = await api.post<ApiResponse<Warehouse>>('/inventory/warehouses', payload);
+  const { data } = await api.post<ApiResponse<Warehouse>>('/v1/inventory/warehouses', payload);
   return data;
 }
 
 export async function updateWarehouse(id: string, payload: Partial<Warehouse>) {
-  const { data } = await api.put<ApiResponse<Warehouse>>(`/inventory/warehouses/${id}`, payload);
+  const { data } = await api.put<ApiResponse<Warehouse>>(`/v1/inventory/warehouses/${id}`, payload);
   return data;
 }
 
 export async function deleteWarehouse(id: string) {
-  const { data } = await api.delete(`/inventory/warehouses/${id}`);
+  const { data } = await api.delete(`/v1/inventory/warehouses/${id}`);
   return data;
 }
 
@@ -100,11 +100,11 @@ export async function getStockMoves(params: {
   page?: number;
   size?: number;
 } = {}): Promise<ApiResponse<PageResponse<StockMove>>> {
-  const { data } = await api.get('/inventory/stock-moves', { params });
+  const { data } = await api.get('/v1/inventory/stock-moves', { params });
   return data;
 }
 
 export async function createStockMove(payload: Partial<StockMove>) {
-  const { data } = await api.post<ApiResponse<StockMove>>('/inventory/stock-moves', payload);
+  const { data } = await api.post<ApiResponse<StockMove>>('/v1/inventory/stock-moves', payload);
   return data;
 }

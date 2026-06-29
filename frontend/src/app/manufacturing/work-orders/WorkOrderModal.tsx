@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
 import { BillOfMaterial } from '@/api/manufacturing.api';
 import { Warehouse } from '@/api/inventory.api';
+import { toast } from '@/components/ui/Toast';
 
 interface Props {
   boms: BillOfMaterial[];
@@ -35,6 +37,8 @@ export function WorkOrderModal({ boms, warehouses, mutation, onClose }: Props) {
       startDate: form.startDate || undefined,
       endDate: form.endDate || undefined,
       description: form.description || undefined,
+    }, {
+      onError: (err: any) => toast.error(err?.response?.data?.message ?? 'Có lỗi xảy ra'),
     });
   }
 
@@ -46,26 +50,22 @@ export function WorkOrderModal({ boms, warehouses, mutation, onClose }: Props) {
           <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded"><X size={18} /></button>
         </div>
         <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
-          <Input label="Số lệnh" name="orderNumber" value={form.orderNumber} onChange={(e) => setForm({ ...form, orderNumber: e.target.value })} />
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">BOM</label>
-            <select value={form.bomId} onChange={(e) => setForm({ ...form, bomId: e.target.value })} className="input-base">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input label="Số lệnh" name="orderNumber" value={form.orderNumber} onChange={(e) => setForm({ ...form, orderNumber: e.target.value })} />
+            <Select label="BOM" value={form.bomId} onChange={(e) => setForm({ ...form, bomId: e.target.value })}>
               <option value="">-- Chọn BOM --</option>
               {boms.map((b) => (
                 <option key={b.id} value={b.id}>{b.code} - {b.productName}</option>
               ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Kho xuất</label>
-            <select value={form.warehouseId} onChange={(e) => setForm({ ...form, warehouseId: e.target.value })} className="input-base">
+            </Select>
+            <Select label="Kho xuất" value={form.warehouseId} onChange={(e) => setForm({ ...form, warehouseId: e.target.value })}>
               <option value="">-- Chọn kho --</option>
               {warehouses.map((w) => (
                 <option key={w.id} value={w.id}>{w.name}</option>
               ))}
-            </select>
+            </Select>
+            <Input label="Số lượng" name="quantity" type="number" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
           </div>
-          <Input label="Số lượng" name="quantity" type="number" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Ngày bắt đầu</label>

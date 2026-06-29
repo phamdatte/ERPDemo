@@ -14,7 +14,14 @@ import {
   deleteEmployee,
   Employee,
 } from '@/api/hr.api';
+import { toast } from '@/components/ui/Toast';
 import { EmployeeModal } from './EmployeeModal';
+
+const statusLabels: Record<string, string> = {
+  ACTIVE: 'Hoạt động',
+  INACTIVE: 'Vô hiệu',
+  ON_LEAVE: 'Nghỉ phép',
+};
 
 export default function EmployeesPage() {
   const qc = useQueryClient();
@@ -29,7 +36,7 @@ export default function EmployeesPage() {
 
   const del = useMutation({
     mutationFn: deleteEmployee,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['employees'] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['employees'] }); toast.success('Xóa nhân viên thành công'); },
   });
 
   const content = data?.data;
@@ -70,11 +77,11 @@ export default function EmployeesPage() {
                   <td className="px-4 py-3 text-slate-700">{emp.fullName}</td>
                   <td className="px-4 py-3 text-slate-500">{emp.email ?? '-'}</td>
                   <td className="px-4 py-3 text-slate-500">{emp.departmentName ?? '-'}</td>
-                  <td className="px-4 py-3"><Badge tone={emp.status === 'ACTIVE' ? 'success' : 'neutral'}>{emp.status}</Badge></td>
+                  <td className="px-4 py-3"><Badge tone={emp.status === 'ACTIVE' ? 'success' : 'neutral'}>{statusLabels[emp.status] ?? emp.status}</Badge></td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
                       <Button variant="ghost" onClick={() => setEditing(emp)}><Pencil size={16} /></Button>
-                      <Button variant="ghost" onClick={() => del.mutate(emp.id)} className="text-red-500 hover:text-red-700 hover:bg-red-50"><Trash2 size={16} /></Button>
+                      <Button variant="ghost" onClick={() => { if (window.confirm('Bạn chắc chắn muốn xóa nhân viên này?')) del.mutate(emp.id); }} className="text-red-500 hover:text-red-700 hover:bg-red-50"><Trash2 size={16} /></Button>
                     </div>
                   </td>
                 </tr>

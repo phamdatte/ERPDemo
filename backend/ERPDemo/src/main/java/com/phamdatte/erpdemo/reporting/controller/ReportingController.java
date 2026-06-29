@@ -36,7 +36,7 @@ import java.util.Map;
  * </ul>
  */
 @RestController
-@RequestMapping("/api/reporting")
+@RequestMapping("/v1/reporting")
 public class ReportingController {
 
     private static final MediaType XLSX_TYPE = MediaType.parseMediaType(
@@ -146,14 +146,21 @@ public class ReportingController {
                         new ColumnDef("Ten san pham", "name"),
                         new ColumnDef("Don vi", "unit"),
                         new ColumnDef("Don gia", "unit_price"),
-                        new ColumnDef("Nha cung cap", "vendor_code")
+                        new ColumnDef("Kho", "warehouse_name"),
+                        new ColumnDef("Ton kho", "balance")
                 ),
                 """
-                SELECT p.code, p.name, p.unit, p.unit_price, v.code AS vendor_code
+                SELECT p.code, p.name, p.unit, p.unit_price,
+                       w.name AS warehouse_name,
+                       COALESCE(SUM(CASE WHEN sm.move_type = 'IN' THEN sm.quantity
+                                         WHEN sm.move_type = 'OUT' THEN -sm.quantity
+                                         ELSE 0 END), 0) AS balance
                 FROM inv_product p
-                LEFT JOIN inv_vendor v ON v.id = p.id
-                WHERE p.is_deleted = false
-                ORDER BY p.code
+                CROSS JOIN inv_warehouse w
+                LEFT JOIN inv_stock_move sm ON sm.product_id = p.id AND sm.warehouse_id = w.id AND sm.is_deleted = false
+                WHERE p.is_deleted = false AND w.is_deleted = false
+                GROUP BY p.id, p.code, p.name, p.unit, p.unit_price, w.name
+                ORDER BY p.code, w.code
                 """,
                 new HashMap<>());
     }

@@ -28,11 +28,13 @@ public class BillOfMaterialService {
         this.productRepository = productRepository;
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<BillOfMaterialDto> list(int page, int size) {
         Page<BillOfMaterial> result = billOfMaterialRepository.findAllWithProduct(PageRequest.of(page, size));
         return PageResponse.of(result.map(this::toDto));
     }
 
+    @Transactional(readOnly = true)
     public BillOfMaterialDto get(UUID id) {
         return toDto(billOfMaterialRepository.findWithLinesById(id)
                 .orElseThrow(() -> new IllegalArgumentException("BOM not found: " + id)));

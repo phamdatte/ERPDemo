@@ -43,11 +43,11 @@ public class ReportingService {
                    'users' AS icon
             FROM hr_employee WHERE is_deleted = false
             UNION ALL
-            SELECT 'SALE', 'Đơn bán',
+            SELECT 'SALE', 'Hóa đơn',
                    COUNT(*),
                    COALESCE(SUM(total_amount), 0),
                    'shopping-cart'
-            FROM sale_sales_order WHERE is_deleted = false
+            FROM sale_invoice WHERE is_deleted = false
             UNION ALL
             SELECT 'INVENTORY', 'Sản phẩm',
                    COUNT(*),
@@ -165,7 +165,7 @@ public class ReportingService {
             LEFT JOIN inv_stock_move sm ON sm.product_id = p.id AND sm.warehouse_id = w.id AND sm.is_deleted = false
             WHERE p.is_deleted = false AND w.is_deleted = false
             GROUP BY p.id, p.code, p.name, p.unit, w.name
-            ORDER BY p.code, w.code
+            ORDER BY p.code, w.name
             """;
 
         return jdbc.query(sql, (RowMapper<InventoryRow>) (rs, n) -> new InventoryRow(

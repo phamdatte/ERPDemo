@@ -34,11 +34,13 @@ public class SalesOrderService {
         this.productRepository = productRepository;
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<SalesOrderDto> list(int page, int size) {
         Page<SalesOrder> result = salesOrderRepository.findAllWithCustomer(PageRequest.of(page, size));
         return PageResponse.of(result.map(this::toDto));
     }
 
+    @Transactional(readOnly = true)
     public SalesOrderDto get(UUID id) {
         return toDto(salesOrderRepository.findWithLinesById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Sales order not found: " + id)));

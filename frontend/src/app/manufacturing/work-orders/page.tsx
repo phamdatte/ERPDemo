@@ -7,12 +7,14 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { TableRowSkeleton } from '@/components/ui/Skeleton';
+import { Pagination } from '@/components/ui/Pagination';
 import {
   getBillOfMaterials,
   getWorkOrders,
   createWorkOrder,
   WorkOrder,
 } from '@/api/manufacturing.api';
+import { toast } from '@/components/ui/Toast';
 import { getWarehouses } from '@/api/inventory.api';
 import { WorkOrderModal } from './WorkOrderModal';
 
@@ -21,6 +23,13 @@ const statusTones: Record<string, 'success' | 'warning' | 'error' | 'info'> = {
   IN_PROGRESS: 'info',
   COMPLETED: 'success',
   CANCELLED: 'error',
+};
+
+const statusLabels: Record<string, string> = {
+  DRAFT: 'Nháp',
+  IN_PROGRESS: 'Đang thực hiện',
+  COMPLETED: 'Hoàn thành',
+  CANCELLED: 'Đã hủy',
 };
 
 export default function WorkOrdersPage() {
@@ -45,7 +54,7 @@ export default function WorkOrdersPage() {
 
   const mutation = useMutation({
     mutationFn: createWorkOrder,
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['work-orders'] }); setCreating(false); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['work-orders'] }); toast.success('Tạo lệnh sản xuất thành công'); setCreating(false); },
   });
 
   const content = data?.data;
@@ -55,7 +64,7 @@ export default function WorkOrdersPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Lệnh sản xuất</h1>
-          <p className="text-xs text-slate-400 mt-1">Quản lý_work_order</p>
+          <p className="text-xs text-slate-400 mt-1">Quản lý lệnh sản xuất</p>
         </div>
         <Button onClick={() => setCreating(true)}>
           <Plus size={16} /> Tạo lệnh
@@ -87,13 +96,22 @@ export default function WorkOrdersPage() {
                   <td className="px-4 py-3 text-slate-500">{wo.warehouseName ?? '-'}</td>
                   <td className="px-4 py-3 text-right text-slate-700">{wo.quantity?.toLocaleString('vi-VN') ?? '-'}</td>
                   <td className="px-4 py-3">
-                    <Badge tone={statusTones[wo.status] ?? 'neutral'}>{wo.status}</Badge>
+                    <Badge tone={statusTones[wo.status] ?? 'neutral'}>{statusLabels[wo.status] ?? wo.status}</Badge>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        {content && (
+          <Pagination
+            page={content.pageNumber}
+            totalPages={content.totalPages}
+            totalElements={content.totalElements}
+            pageSize={content.pageSize}
+            onPageChange={setPage}
+          />
+        )}
       </div>
 
       {creating && boms && warehouses && (

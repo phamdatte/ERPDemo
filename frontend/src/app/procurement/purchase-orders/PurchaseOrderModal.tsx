@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { X, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
 import { Vendor } from '@/api/procurement.api';
 import { Product } from '@/api/inventory.api';
 
@@ -75,15 +76,12 @@ export function PurchaseOrderModal({ vendors, products, mutation, onClose }: Pro
               <input type="date" required value={form.orderDate} onChange={(e) => setForm({ ...form, orderDate: e.target.value })} className="input-base" />
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Nhà cung cấp</label>
-            <select required value={form.vendorId} onChange={(e) => setForm({ ...form, vendorId: e.target.value })} className="input-base">
-              <option value="">-- Chọn nhà cung cấp --</option>
-              {vendors.map((v) => (
-                <option key={v.id} value={v.id}>{v.name}</option>
-              ))}
-            </select>
-          </div>
+          <Select label="Nhà cung cấp" required value={form.vendorId} onChange={(e) => setForm({ ...form, vendorId: e.target.value })}>
+            <option value="">-- Chọn nhà cung cấp --</option>
+            {vendors.map((v) => (
+              <option key={v.id} value={v.id}>{v.name}</option>
+            ))}
+          </Select>
           <Input label="Mô tả" name="description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
 
           <div>
@@ -95,12 +93,12 @@ export function PurchaseOrderModal({ vendors, products, mutation, onClose }: Pro
               {lines.map((line, i) => (
                 <div key={i} className="grid grid-cols-12 gap-2 items-end">
                   <div className="col-span-6">
-                    <select value={line.productId} onChange={(e) => updateLine(i, 'productId', e.target.value)} className="input-base text-sm">
+                    <Select value={line.productId} onChange={(e) => updateLine(i, 'productId', e.target.value)} className="text-sm">
                       <option value="">-- Sản phẩm --</option>
                       {products.map((p) => (
                         <option key={p.id} value={p.id}>{p.name}</option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
                   <div className="col-span-2">
                     <input type="number" min="1" placeholder="SL" value={line.quantity} onChange={(e) => updateLine(i, 'quantity', e.target.value)} className="input-base text-sm" />

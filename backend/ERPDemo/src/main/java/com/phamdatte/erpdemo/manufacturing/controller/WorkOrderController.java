@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/manufacturing/work-orders")
+@RequestMapping("/v1/manufacturing/work-orders")
 public class WorkOrderController {
 
     private final WorkOrderService workOrderService;
